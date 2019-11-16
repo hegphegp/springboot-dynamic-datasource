@@ -1,0 +1,100 @@
+# 重写DynamicRoutingDataSource类的输出日志，通过压力测试，开启debug日志，看看 dynamic-datasource-spring-boot-starter 是否负载均衡到每个节点，减少某个节点数据的压力
+# ab -c 100 -n 1000 http://localhost:8765/v1/test
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    dynamic:
+      datasource:
+        master_1:
+          url: jdbc:mysql://172.16.17.12:3306/walle?useUnicode=true&characterEncoding=utf-8&useSSL=false
+          username: root
+          password: password
+          driver-class-name: com.mysql.jdbc.Driver
+          hikari:
+            minimum-idle: 5
+            # 空闲连接存活最大时间，默认180000（3分钟）
+            idle-timeout: 180000
+            min-pool-size: 10
+            # 连接池最大连接数，默认是50
+            maximum-pool-size: 50
+            # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+            auto-commit: true
+            # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+            max-lifetime: 1800000
+            validation-timeout: 2000
+            # 数据库连接超时时间,默认30秒，即30000
+            connection-timeout: 1000
+            connection-test-query: SELECT 1
+        master_2:
+          url: jdbc:mysql://172.16.17.13:3306/walle?useUnicode=true&characterEncoding=utf-8&useSSL=false
+          username: root
+          password: password
+          driver-class-name: com.mysql.jdbc.Driver
+          hikari:
+            minimum-idle: 5
+            # 空闲连接存活最大时间，默认180000（3分钟）
+            idle-timeout: 180000
+            min-pool-size: 10
+            # 连接池最大连接数，默认是50
+            maximum-pool-size: 50
+            # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+            auto-commit: true
+            # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+            max-lifetime: 1800000
+            validation-timeout: 2000
+            # 数据库连接超时时间,默认30秒，即30000
+            connection-timeout: 1000
+            connection-test-query: SELECT 1
+        master_3:
+          url: jdbc:mysql://172.16.17.14:3306/walle?useUnicode=true&characterEncoding=utf-8&useSSL=false
+          username: root
+          password: password
+          driver-class-name: com.mysql.jdbc.Driver
+          hikari:
+            minimum-idle: 5
+            idle-timeout: 180000
+            min-pool-size: 10
+            maximum-pool-size: 50
+            auto-commit: true
+            max-lifetime: 1800000
+            validation-timeout: 2000
+            connection-timeout: 1000
+            connection-test-query: SELECT 1
+        master_4:
+          url: jdbc:mysql://172.16.17.15:3306/walle?useUnicode=true&characterEncoding=utf-8&useSSL=false
+          username: root
+          password: password
+          driver-class-name: com.mysql.jdbc.Driver
+          hikari:
+            minimum-idle: 5
+            idle-timeout: 180000
+            min-pool-size: 10
+            maximum-pool-size: 50
+            auto-commit: true
+            max-lifetime: 1800000
+            validation-timeout: 2000
+            connection-timeout: 1000
+            connection-test-query: SELECT 1
+        master_5:
+          url: jdbc:mysql://172.16.17.11:3306/walle?useUnicode=true&characterEncoding=utf-8&useSSL=false
+          username: root
+          password: password
+          driver-class-name: com.mysql.jdbc.Driver
+          hikari:
+            minimum-idle: 5
+            idle-timeout: 180000
+            min-pool-size: 10
+            maximum-pool-size: 50
+            auto-commit: true
+            max-lifetime: 1800000
+            validation-timeout: 2000
+            connection-timeout: 1000
+            connection-test-query: SELECT 1
+
+logging:
+  level:
+    com.baomidou: debug
+
+server:
+  port: 8765
